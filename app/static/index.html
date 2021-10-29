@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <button id="open">open sse</button>
+    <button id="close">close sse</button>
+
+    <div id="content">
+
+    </div>
+
+
+    <script>
+        let source;
+            
+        const openBtn = document.querySelector('#open')
+        const closeBtn = document.querySelector('#close')
+        const content = document.querySelector('#content')
+
+        const handleOpen = () => {
+
+            source = new EventSource('/message-center');
+            source.addEventListener('message', (e) => {
+                const data = e.data
+                content.innerHTML = content.innerHTML +='\n' + `<div>${data}</div>` 
+            }, false)
+
+            source.addEventListener('open', () => {
+                console.log('open link')
+            })
+
+            source.addEventListener('close', () => {
+                console.log('close link')
+            })
+            
+        }
+
+        const handleClose = () => {
+            source.close()
+        }
+
+
+        openBtn.addEventListener('click', handleOpen)
+        closeBtn.addEventListener('click', handleClose)
+    </script>
+</body>
+
+</html>

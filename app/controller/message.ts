@@ -10,7 +10,6 @@ import { Controller } from 'egg';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const indexHtml = fs.readFileSync(path.join(__dirname, '../../demo/index.html'), 'utf-8');
 
 export default class HomeController extends Controller {
   public async init() {
@@ -23,9 +22,9 @@ export default class HomeController extends Controller {
       'Access-Control-Allow-Origin': '*',
     });
 
+    ctx.respond = false;
     ctx.res.write('retry: 10000\n');
     ctx.res.write('event: connecttime\n');
-    ctx.res.write('data: ' + (new Date()) + '\n\n');
     ctx.res.write('data: ' + (new Date()) + '\n\n');
 
     const interval = setInterval(function() {
@@ -41,6 +40,8 @@ export default class HomeController extends Controller {
 
   async sendHtml() {
     this.ctx.headers['content-type'] = 'text/html';
+    const indexHtml = fs.readFileSync(path.join(__dirname, '../../demo/index.html'), 'utf-8');
+
     this.ctx.body = indexHtml;
   }
 }
